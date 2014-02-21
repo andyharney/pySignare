@@ -1,26 +1,22 @@
-pySignare by Andy
-=================
+#pySignare by Andy
 
-Python APK Signer
 
-Current Status = Under Development (Working)
+##Python APK Signer
 
- 1 : Test Key signing works.
- 2 : Private Key signing works.
- 3 : ZipALign works.
- 4 : Private Key generation works.
+###Current Status = Working
 
- 90% Code Complete
- Some tidy up required, adding comments and output formatting.
+1. Test Key signing works.
+2. Private Key signing works.
+3. ZipALign works.
+4. Private Key generation works.
 
- To Do
- =====
+95% Code Complete
+Some tidy up required, adding comments and output formatting.
 
- In no particular order.
+###To Do
 
- (Private Key Signing) - Read keystores and present list to choose.
- (All) - Code Cleanup
+* **Private Key Signing** : Read keystores and present list to choose.
+* **All** : Code Cleanup
 
- Contact
- =======
- http://forum.xda-developers.com/member.php?u=797171
+###Contact
+[Andy @ XDA-Developers](http://forum.xda-developers.com/member.php?u=797171)
