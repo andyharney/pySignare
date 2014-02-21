@@ -102,13 +102,14 @@ def checkoutputfolder():
     import os
     import os.path
 
-    if os.path.isdir('./SignedApks/'):
-        #print('Output Folder Exists....')
-        #print('\n')
-        mainmenu()
-    else:
+    # Create Required Folders
+    if not os.path.isdir('./SignedApks/'):
         os.mkdir('SignedApks')
-        mainmenu()
+    if not os.path.isdir('./ZipAlignedApks/'):
+        os.mkdir('ZipAlignedApks')
+    if not os.path.isdir('./PrivateKey/'):
+        os.mkdir('PrivateKey')
+    mainmenu()
 
 
 def debugkeysign():
@@ -158,9 +159,6 @@ def privatekeysign():
 
     if os.path.isdir('./tmp/'):
         shutil.rmtree('./tmp')
-    else:
-        print('No tmp folder')
-
     print('\n' + 'Private Key Signing' + '\n')
     # Create List of APKs
     apkdir = './UnsignedApks/'
@@ -178,7 +176,6 @@ def privatekeysign():
         signcount = 0
         print('Found ' + str(apkcount) + ' APK' + '\n')
         keystorepass = input('Please Enter your KEYSTORE Password : ')
-        #KeyPass = input('Please Enter your KEY Password : ')
         while signcount != apkcount:
             for APK in apklist:
                 print('Signing ' + APK)
@@ -267,6 +264,9 @@ def zipalign():
                                  './ZipAlignedApks/' + APK
     ])
             zipaligncount += 1
+    print()
+    print('Zip Aligning has finished, please check the messages above for any errors.')
+    input('Press any key to continue')
     print()
     mainmenu()
 
