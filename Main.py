@@ -15,12 +15,14 @@
 # Here we go
 # Check to see if Java is installed and added to system path
 
-def checkJava():
+
+def checkjava():
+
     import sys
     import subprocess
 
-    sJava = subprocess.call(['java', '-version'])
-    if sJava == None:
+    sjava = subprocess.call(['java', '-version'])
+    if sjava is None:
         print('Java not installed or added to system path, please install')
         pause = input('Press Any Key To Exit')
         del pause
@@ -28,171 +30,205 @@ def checkJava():
         sys.exit()
     else:
         print('Java Seems OK' + '\n')
-    CheckOutputFolder()
+    checkoutputfolder()
 
-def MainMenu():
 
-    LineBreak = ('-'*28)
+def mainmenu():
+
+    linebreak = ('-' * 28)
     print('Main Menu')
-    print(LineBreak)
+    print(linebreak)
     print('1 : Sign With Debug Key')
     print('2 : Sign With Private Key')
     print('3 : ZipAlign Signed APKs')
-    print(LineBreak)
+    print(linebreak)
     print('4 : Generate Private Key')
-    print(LineBreak)
+    print(linebreak)
     print('5 : Exit ')
-    print(LineBreak)
-    print('\n')
-    MenuChoice()
+    print(linebreak)
+    menuchoice()
 
-def MenuChoice():
+
+def menuchoice():
+
     import sys
 
+    class MenuError(Exception):
+        pass
+
+    class HiddenMenu(Exception):
+        pass
+
+    option = ''
     # User enters option number, its validated as an integer and passes to the Options List
     while True:
+
         try:
             option = int(input('Please Choose an Option : '))
             if 1 <= option <= 5:
                 break
-            elif option == 21:
-                print('Hidden Menu')
-                raise Exception('Hidden Menu')
+            elif option == 1729:
+                raise HiddenMenu()
             else:
-                raise Exception('Not in Range')
+                raise MenuError()
 
         except ValueError:
             print('Please enter a valid option, whole numbers please.')
             continue
-        except Exception:
+        except MenuError:
             print('Please enter a valid option, ' + str(option) + " isn't an option.")
+        except HiddenMenu:
+            print('Very Clever, but nothing is hidden. Yet')
 
     if 1 <= option <= 5:
         # Options List
         if option == 1:
-            DebugKeySign()
+            debugkeysign()
         elif option == 2:
-            PivateKeySign()
+            privatekeysign()
         elif option == 3:
-            option3()
+            zipalign()
         elif option == 4:
-            GenPrivKey()
+            genprivkey()
         elif option == 5:
             # Exit gracefully
             print('Quitting')
             sys.exit()
     print('Please Choose a Valid Option')
 
-# Main Function
-def CheckOutputFolder():
-    import os
-    import os.path
-    if os.path.isdir('./SignedApks/'):
-        print('Output Folder Exists....')
-        print('\n')
-    else:
-        print('Making Output Folder')
-        print('\n')
-        os.mkdir('SignedApks')
-    MainMenu()
 
-def DebugKeySign():
+def checkoutputfolder():
+
     import os
     import os.path
-    import sys
+
+    if os.path.isdir('./SignedApks/'):
+        #print('Output Folder Exists....')
+        #print('\n')
+        mainmenu()
+    else:
+        os.mkdir('SignedApks')
+        mainmenu()
+
+
+def debugkeysign():
+
+    import os
+    import os.path
     import subprocess
 
     print('\n' + 'Debug Key Signing' + '\n')
     # Create List of APKs
-    APKDir = './UnsignedApks/'
-    APKList = os.listdir(APKDir)
-    DebugKeyDir = './DebugKey/'
-    DebugKeys = os.listdir(DebugKeyDir)
-    # Returns the number of APKs Found
-    print('Scanning Unsigned Apks Folder')
+    apkdir = './UnsignedApks/'
+    apklist = os.listdir(apkdir)
+    debugkeydir = './DebugKey/'
+    debugkeys = os.listdir(debugkeydir)
     # If none are found exit with message
-    if len(APKList) == 0:
+    if len(apklist) == 0:
         print('No APKs Found' + '\n')
-        pause = input('Press Any Key To Exit')
+        pause = input('Press Any Key to Return to Menu')
+        print()
         del pause
-        # Exit gracefully
-        sys.exit()
+        mainmenu()
     else:
-        print('Found ' + str(len(APKList)) + ' APK' + '\n')
-        for APK in APKList:
-            try:
-                print(APK)
-                subprocess.call(['java',
-                                 '-jar',
-                                 './Files/signapk.jar',
-                                 './DebugKey/' + DebugKeys[1],
-                                 './DebugKey/' + DebugKeys[0],
-                                 './UnsignedApks/' + APK,
-                                 './SignedApks/' + APK
-                ])
-            except:
-                print('Not Working')
-    MainMenu()
+        print('Found ' + str(len(apklist)) + ' APK' + '\n')
+        for APK in apklist:
+            print('Signing ' + APK)
+            subprocess.call(['java',
+                             '-jar',
+                             './Files/signapk.jar',
+                             './DebugKey/' + debugkeys[1],
+                             './DebugKey/' + debugkeys[0],
+                             './UnsignedApks/' + APK,
+                             './SignedApks/' + APK
+            ])
+    print()
+    print('Signing has finished, please check the messages above for any errors.')
+    input('Press any key to continue')
+    print()
+    mainmenu()
 
-def PivateKeySign():
+
+def privatekeysign():
+
     import os
     import os.path
-    import sys
     import subprocess
+    import shutil
+
+    if os.path.isdir('./tmp/'):
+        shutil.rmtree('./tmp')
+    else:
+        print('No tmp folder')
 
     print('\n' + 'Private Key Signing' + '\n')
     # Create List of APKs
-    APKDir = './UnsignedApks/'
-    APKList = os.listdir(APKDir)
+    apkdir = './UnsignedApks/'
+    apklist = os.listdir(apkdir)
     # Returns the number of APKs Found
-    print('Scanning Unsigned Apks Folder')
-    # If none are found exit with message
-    UsrAlias = input('Alias You Wish To Sign With : ')
-    if len(APKList) == 0:
+    usralias = input('Alias You Wish To Sign With : ')
+    if len(apklist) == 0:
         print('No APKs Found' + '\n')
-        pause = input('Press Any Key To Exit')
+        pause = input('Press Any Key to Return to Menu')
+        print()
         del pause
-        # Exit gracefully
-        sys.exit()
+        mainmenu()
     else:
-        print('Found ' + str(len(APKList)) + ' APK' + '\n')
-        KeyStorePass = input('Please Enter your KEYSTORE Password : ')
-        KeyPass = input('Please Enter your KEY Password : ')
-        for APK in APKList:
-            try:
-                subprocess.call(['./Files/jarsigner.exe',
-                             '-keystore',
-                             '"' + './PrivateKey/private-key.keystore' + '"',
-                             KeyStorePass,
-                             '-keypass',
-                             KeyPass,
-                             '"' + './UnsignedApks/' + APK + '"',
-                             '"' + str(UsrAlias) + '"'
-              ])
+        apkcount = len(apklist)
+        signcount = 0
+        print('Found ' + str(apkcount) + ' APK' + '\n')
+        keystorepass = input('Please Enter your KEYSTORE Password : ')
+        #KeyPass = input('Please Enter your KEY Password : ')
+        while signcount != apkcount:
+            for APK in apklist:
                 print('Signing ' + APK)
-                MainMenu()
-            except:
-                print('Not Working')
-                MainMenu()
+                os.mkdir('tmp')
+                shutil.copyfile('./UnsignedApks/' + APK, './tmp/' + APK)
+                subprocess.call(['./Files/jarsigner.exe',
+                                 '-keystore',
+                                 'PrivateKey/' + str(usralias) + '-private-key.keystore',
+                                 '-storepass',
+                                 keystorepass,
+                                 './UnsignedApks/' + APK,
+                                 str(usralias),
+                                 #'-verify',
+                                 #'-verbose',
+                                 #'-certs'
+                ])
+                try:
+                    os.rename('./UnsignedApks/' + APK, './SignedApks/' + APK)
+                except FileExistsError:
+                    os.rename('./SignedApks/' + APK, './tmp/T_' + APK)
+                    os.rename('./UnsignedApks/' + APK, './SignedApks/' + APK)
+                os.rename('./tmp/' + APK, './UnsignedApks/' + APK)
+                shutil.rmtree('./tmp/')
+                signcount += 1
+        print()
+        print('Signing has finished, please check the messages above for any errors.')
+        input('Press any key to continue')
+        print()
+        mainmenu()
 
-    # %FILES%\jarsigner.exe -keystore .\PrivateKey\%alias%-private-key.keystore %%A %alias%
-def GenPrivKey():
+
+def genprivkey():
+
     import subprocess
+
     print('Insert Warning')
-    UsrAlias = input('Choose Desired Alias : ')
-    KeyPass = input('Choose Desired KEY (not keystore) Password : ')
-    while len(KeyPass) < 6:
+    usralias = input('Choose Desired Alias : ')
+    keypass = input('Choose Desired KEY (not keystore) Password : ')
+    while len(keypass) < 6:
         print('Your Key Password MUST be greater than 6 characters, try again')
-        KeyPass = input('Choose Desired KEY Password : ')
+        keypass = input('Choose Desired KEY Password : ')
     subprocess.call(['./Files/keytool.exe',
                      '-genkey',
                      '-v',
                      '-keystore',
-                     './PrivateKey/' + str(UsrAlias) + '-private-key.keystore',
+                     './PrivateKey/' + str(usralias) + '-private-key.keystore',
                      '-alias',
-                     UsrAlias,
+                     usralias,
                      '-keypass',
-                     KeyPass,
+                     keypass,
                      '-keyalg',
                      'RSA',
                      '-keysize',
@@ -200,9 +236,38 @@ def GenPrivKey():
                      '-validity',
                      '10000'
     ])
-    a = input('Pause')
-    MainMenu()
+    print()
+    mainmenu()
 
 
+def zipalign():
 
-checkJava()
+    import os
+    import subprocess
+
+    print('\n' + 'Zip Aliging' + '\n')
+    zipaligncount = 0
+    apkdir = './SignedApks/'
+    apklist = os.listdir(apkdir)
+    apkcount = len(apklist)
+    if len(apklist) == 0:
+        print('No Signed APKs Found' + '\n')
+        pause = input('Press Any Key to Return to Menu')
+        del pause
+        print()
+        mainmenu()
+    else:
+        while zipaligncount != apkcount:
+            for APK in apklist:
+                print(APK)
+                subprocess.call(['./Files/zipalign.exe',
+                                 '-f',
+                                 '4',
+                                 './SignedApks/' + APK,
+                                 './ZipAlignedApks/' + APK
+    ])
+            zipaligncount += 1
+    print()
+    mainmenu()
+
+checkjava()
