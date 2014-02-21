@@ -17,6 +17,10 @@ Current Status = Under Development (Working)
  =====
 
  In no particular order.
- 
+
  (Private Key Signing) - Read keystores and present list to choose.
  (All) - Code Cleanup
+
+ Contact
+ =======
+ http://forum.xda-developers.com/member.php?u=797171
