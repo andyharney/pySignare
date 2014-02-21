@@ -118,6 +118,7 @@ def splash():
 
     print()
     print('pySignare')
+    print('https://github.com/andyharney/pySignare')
     print('')
     print('Written Exclusively For All Members of XDA-Developers.com')
     print()
