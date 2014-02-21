@@ -29,8 +29,8 @@ def checkjava():
         # Exit gracefully
         sys.exit()
     else:
-        print('Java Seems OK' + '\n')
-    checkoutputfolder()
+        print()
+        checkoutputfolder()
 
 
 def mainmenu():
@@ -111,6 +111,42 @@ def checkoutputfolder():
         os.mkdir('PrivateKey')
     mainmenu()
 
+
+def splash():
+
+    import sys
+
+    print()
+    print('pySignare')
+    print('')
+    print('Written Exclusively For All Members of XDA-Developers.com')
+    print()
+    print('by Andy')
+    print('http://forum.xda-developers.com/member.php?u=797171')
+    print()
+    print('''
+Copyright 2014 Andy Harney (2014)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.''')
+    print()
+    print()
+    lic = input('Do you accept the terms of the above licence? Y/N - ')
+    print()
+    if lic.lower() == 'y':
+        checkjava()
+    else:
+        print('Quitting')
+        sys.exit()
 
 def debugkeysign():
 
@@ -270,4 +306,4 @@ def zipalign():
     print()
     mainmenu()
 
-checkjava()
+splash()
