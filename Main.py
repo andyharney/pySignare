@@ -164,7 +164,7 @@ def debugkeysign():
     # If none are found exit with message
     if len(apklist) == 0:
         print('No APKs Found' + '\n')
-        pause = input('Press Any Key to Return to Menu')
+        pause = input('Press Enter to Return to Menu')
         print()
         del pause
         mainmenu()
@@ -182,7 +182,7 @@ def debugkeysign():
             ])
     print()
     print('Signing has finished, please check the messages above for any errors.')
-    input('Press any key to continue')
+    input('Press Enter to continue')
     print()
     mainmenu()
 
@@ -201,14 +201,14 @@ def privatekeysign():
     apkdir = './UnsignedApks/'
     apklist = os.listdir(apkdir)
     # Returns the number of APKs Found
-    usralias = input('Alias You Wish To Sign With : ')
     if len(apklist) == 0:
         print('No APKs Found' + '\n')
-        pause = input('Press Any Key to Return to Menu')
+        pause = input('Press Enter to Return to Menu')
         print()
         del pause
         mainmenu()
     else:
+        usralias = input('Alias You Wish To Sign With : ')
         apkcount = len(apklist)
         signcount = 0
         print('Found ' + str(apkcount) + ' APK' + '\n')
@@ -239,7 +239,7 @@ def privatekeysign():
                 signcount += 1
         print()
         print('Signing has finished, please check the messages above for any errors.')
-        input('Press any key to continue')
+        input('Press Enter to continue')
         print()
         mainmenu()
 
@@ -286,7 +286,7 @@ def zipalign():
     apkcount = len(apklist)
     if len(apklist) == 0:
         print('No Signed APKs Found' + '\n')
-        pause = input('Press Any Key to Return to Menu')
+        pause = input('Press Enter to Return to Menu')
         del pause
         print()
         mainmenu()
@@ -303,7 +303,7 @@ def zipalign():
             zipaligncount += 1
     print()
     print('Zip Aligning has finished, please check the messages above for any errors.')
-    input('Press any key to continue')
+    input('Press Enter to continue')
     print()
     mainmenu()
 
