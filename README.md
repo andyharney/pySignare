@@ -10,13 +10,20 @@
 3. ZipALign works.
 4. Private Key generation works.
 
-95% Code Complete
-Some tidy up required, adding comments and output formatting.
+100% Code Complete
+Minor tidy up required.
 
 ###To Do
 
 * **Private Key Signing** : Read keystores and present list to choose.
-* **All** : Code Cleanup
+* **All** : Minor Code Cleanup
 
 ###Contact
 [Andy @ XDA-Developers](http://forum.xda-developers.com/member.php?u=797171)
+
+###Prerequisites
+* [Java](http://java.com/en/download/index.jsp)
+* [Python 3+](http://www.python.org/downloads/)
+
+###Thanks
+* [XDA-Developers](http://forum.xda-developers.com)
