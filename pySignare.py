@@ -95,6 +95,9 @@ def checkoutputfolder():
 
 def mainmenu():
 
+    import os
+
+    os.system('cls')
     # Here the main menu is printed
     linebreak = ('-' * 28)
     print('Main Menu')
@@ -177,6 +180,7 @@ def debugkeysign():
     import os.path
     import subprocess
 
+    os.system('cls')
     print('\n' + 'Debug Key Signing' + '\n')
     # Create List of APKs
     apkdir = './UnsignedApks/'
@@ -216,6 +220,7 @@ def privatekeysign():
     import subprocess
     import shutil
 
+    os.system('cls')
     if os.path.isdir('./tmp/'):
         shutil.rmtree('./tmp')
     print('\n' + 'Private Key Signing' + '\n')
@@ -296,7 +301,9 @@ def privatekeysign():
 def genprivkey():
 
     import subprocess
+    import os
 
+    os.system('cls')
     # Generic warning about trusting some code from a random bloke on the intertubes
     print('''
     WARNING
@@ -335,7 +342,7 @@ def genprivkey():
                      '10000'
     ])
     print()
-    print('Seems your key was created successfully')
+    print('Please Check the Above Log for Any Errors')
     input('Press Enter to Continue')
     # Overwrite keypass
     keypass = '_0_'
@@ -349,6 +356,7 @@ def zipalign():
     import os
     import subprocess
 
+    os.system('cls')
     print('\n' + 'Zip Aliging' + '\n')
     zipaligncount = 0
     apkdir = './SignedApks/'
