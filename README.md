@@ -15,7 +15,7 @@ Minor tidy up required.
 
 ###To Do
 
-* **Private Key Signing** : Read keystores and present list to choose.
+* ~~**Private Key Signing** : Read keystores and present list to choose.~~ **Done**
 * **All** : Minor Code Cleanup
 
 ###Contact
