@@ -98,6 +98,9 @@ def mainmenu():
     import os
 
     os.system('cls')
+    print('pySignare v1.0')
+    print()
+    print()
     # Here the main menu is printed
     linebreak = ('-' * 28)
     print('Main Menu')
@@ -212,6 +215,7 @@ def debugkeysign():
     del apklist, apkdir, debugkeydir, debugkeys
     mainmenu()
 
+
 def privkeyprep():
 
     class MenuError(Exception):
@@ -249,9 +253,10 @@ def privkeyprep():
     else:
         print(str(privkeycount) + ' Private Keys Found')
         print()
-        for privkey in privkeylist:
-            keynum = (privkeylist.index(privkey) + 1)
-            print(str(keynum) + ' : ' + str(privkey))
+        # Thanks Martijn Pieters
+        # http://stackoverflow.com/a/21962946/3303492
+        for keynum, privkey in enumerate(privkeylist, 1):
+            print('{} : {}'.format(keynum, privkey))
         while True:
             # This while loop catches the option choice and will only break if the choice is valid
             try:
@@ -275,13 +280,11 @@ def privkeyprep():
         privatekeysigning(apklist, apkcount, chosenprivatekey)
 
 
-
 def privatekeysigning(apklist, apkcount, chosenprivatekey):
 
     import os
     import shutil
     import subprocess
-
 
     alias = str(str.rstrip(chosenprivatekey, '-private-key.keystore'))
     signcount = 0
@@ -305,7 +308,7 @@ def privatekeysigning(apklist, apkcount, chosenprivatekey):
             shutil.copyfile('./UnsignedApks/' + APK, './tmp/' + APK)
             subprocess.call(['./Files/jarsigner.exe',
                              '-keystore',
-                             'PrivateKey/' + str(chosenprivatekey),
+                             './PrivateKey/' + str(chosenprivatekey),
                              '-storepass',
                              keystorepass,
                              './UnsignedApks/' + APK,
@@ -345,104 +348,6 @@ def privatekeysigning(apklist, apkcount, chosenprivatekey):
     del apklist, apkcount, signcount, chosenprivatekey
     # Return to the menu
     mainmenu()
-
-
-# def privatekeysign():
-#
-#     import os
-#     import os.path
-#     import subprocess
-#     import shutil
-#
-#     os.system('cls')
-#     if os.path.isdir('./tmp/'):
-#         shutil.rmtree('./tmp')
-#     print('\n' + 'Private Key Signing' + '\n')
-#     # Create List of APKs
-#     apkdir = './UnsignedApks/'
-#     apklist = os.listdir(apkdir)
-#     # Returns the number of APKs Found
-#     privkeydir = './PrivateKey/'
-#     privkeylist = os.listdir(privkeydir)
-#     privkeylen = len(privkeylist)
-#     if privkeylen == 0:
-#         print('No Private Keys Found' + '\n')
-#         input('Press Enter to Return to Menu')
-#         print()
-#         mainmenu()
-#     sorted(privkeylist)
-#     if len(apklist) == 0:
-#         print('No APKs Found' + '\n')
-#         input('Press Enter to Return to Menu')
-#         print()
-#         mainmenu()
-#     # if privkeylen == 1:
-#     #     print('Nothing Yet')
-#     else:
-#         # Multi keys found.
-#         print(str(privkeylen) + ' Private Keys Found')
-#         usralias = input('Alias You Wish To Sign With : ')
-#         apkcount = len(apklist)
-#         signcount = 0
-#         if len(apklist) == 1:
-#             print('Found ' + str(apkcount) + ' APK' + '\n')
-#         else:
-#             print('Found ' + str(apkcount) + ' APKs' + '\n')
-#         # Insert warning about entering the keystore password
-#         print('Important, your KEYSTORE password is required to sign multiple apks at once.')
-#         print("Your KEYSTORE password is not used outside of this menu option. It's cleared when signing is complete.")
-#         print()
-#         keystorepass = input('Please Enter your KEYSTORE Password : ')
-#         while signcount != apkcount:
-#             for APK in apklist:
-#                 print('Signing ' + APK)
-#                 # Because private key signing is done "in-place" we backup the original apk, sign, move and restore
-#                 # Create tmp folder
-#                 os.mkdir('tmp')
-#                 # Copy unsigned apk out
-#                 shutil.copyfile('./UnsignedApks/' + APK, './tmp/' + APK)
-#                 subprocess.call(['./Files/jarsigner.exe',
-#                                  '-keystore',
-#                                  'PrivateKey/' + str(usralias) + '-private-key.keystore',
-#                                  '-storepass',
-#                                  keystorepass,
-#                                  './UnsignedApks/' + APK,
-#                                  str(usralias),
-#                                  #'-verify',
-#                                  #'-verbose',
-#                                  #'-certs'
-#                 ])
-#                 # Now we try to put the signed apk into the signed folder
-#                 try:
-#                     os.rename('./UnsignedApks/' + APK, './SignedApks/' + APK)
-#                 except FileExistsError:
-#                     # If the file already exists, we move signed file out and replace
-#                     os.rename('./SignedApks/' + APK, './tmp/T_' + APK)
-#                     os.rename('./UnsignedApks/' + APK, './SignedApks/' + APK)
-#                 except PermissionError:
-#                     # If the unsigned apk is open, this error is raised
-#                     print()
-#                     print('Seems ' + APK + ' is open elsewhere. Unable to continue')
-#                     input('Press Enter to Quit to Menu')
-#                     print()
-#                     mainmenu()
-#                 # Restore the unsigned apk.
-#                 os.rename('./tmp/' + APK, './UnsignedApks/' + APK)
-#                 # Clean up
-#                 shutil.rmtree('./tmp/')
-#                 signcount += 1
-#         print()
-#         print('Signing has finished, please check the messages above for any errors.')
-#         # Keystore password is overwritten, then deleted. Alias is also deleted
-#         keystorepass = '_0_'
-#         del keystorepass, usralias
-#         print('Your KEYSTORE password has been cleared')
-#         input('Press Enter to continue')
-#         print()
-#         # Clear other objects
-#         del apkdir, apklist, apkcount, signcount
-#         # Return to the menu
-#         mainmenu()
 
 
 def genprivkey():
