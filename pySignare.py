@@ -12,6 +12,18 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+# Define some global vars for later use
+version = '1.001'
+# APK Folders
+usapks = './UnsignedApks/'
+sapks = './SignedApks/'
+zaapks = './ZipAlignedApks/'
+# Key Folders
+dgkeydir = './DebugKey/'
+privkeydir = './PrivateKey/'
+# Temp Folder
+tmp = './tmp/'
+
 # Loads the splash, with a standard Apache Licence 2.0 disclaimer, and an acceptance option
 
 
@@ -82,12 +94,14 @@ def checkoutputfolder():
     import os
     import os.path
 
+    global sapks, zaapks, privkeydir
+
     # Create required output folders
-    if not os.path.isdir('./SignedApks/'):
+    if not os.path.isdir(sapks):
         os.mkdir('SignedApks')
-    if not os.path.isdir('./ZipAlignedApks/'):
+    if not os.path.isdir(zaapks):
         os.mkdir('ZipAlignedApks')
-    if not os.path.isdir('./PrivateKey/'):
+    if not os.path.isdir(privkeydir):
         os.mkdir('PrivateKey')
     # All clear, now the main menu function is loaded.
     mainmenu()
@@ -97,8 +111,10 @@ def mainmenu():
 
     import os
 
+    global version
+
     os.system('cls')
-    print('pySignare v1.0')
+    print('pySignare v' + version)
     print()
     print()
     # Here the main menu is printed
@@ -183,13 +199,13 @@ def debugkeysign():
     import os.path
     import subprocess
 
+    global usapks, dgkeydir, sapks
+
     os.system('cls')
     print('\n' + 'Debug Key Signing' + '\n')
     # Create List of APKs
-    apkdir = './UnsignedApks/'
-    apklist = os.listdir(apkdir)
-    debugkeydir = './DebugKey/'
-    debugkeys = os.listdir(debugkeydir)
+    apklist = os.listdir(usapks)
+    debugkeys = os.listdir(dgkeydir)
     # If none are found exit with message
     if len(apklist) == 0:
         print('No APKs Found' + '\n')
@@ -203,16 +219,16 @@ def debugkeysign():
             subprocess.call(['java',
                              '-jar',
                              './Files/signapk.jar',
-                             './DebugKey/' + debugkeys[1],
-                             './DebugKey/' + debugkeys[0],
-                             './UnsignedApks/' + APK,
-                             './SignedApks/' + APK
+                             dgkeydir + debugkeys[1],
+                             dgkeydir + debugkeys[0],
+                             usapks + APK,
+                             sapks + APK
             ])
     print()
     print('Signing has finished, please check the messages above for any errors.')
     input('Press Enter to continue')
     print()
-    del apklist, apkdir, debugkeydir, debugkeys
+    del apklist, debugkeys
     mainmenu()
 
 
@@ -224,15 +240,15 @@ def privkeyprep():
     import os
     import shutil
 
+    global usapks, tmp, privkeydir
+
     os.system('cls')
-    if os.path.isdir('./tmp/'):
-        shutil.rmtree('./tmp')
+    if os.path.isdir(tmp):
+        shutil.rmtree(tmp)
     print('\n' + 'Private Key Signing' + '\n')
     # Create List of APKs
-    apkdir = './UnsignedApks/'
-    apklist = os.listdir(apkdir)
+    apklist = os.listdir(usapks)
     apkcount = len(apklist)
-    privkeydir = './PrivateKey/'
     privkeylist = os.listdir(privkeydir)
     privkeycount = len(privkeylist)
     keychoice = 0
@@ -355,6 +371,8 @@ def genprivkey():
     import subprocess
     import os
 
+    global privkeydir
+
     os.system('cls')
     # Generic warning about trusting some code from a random bloke on the intertubes
     print('''
@@ -381,7 +399,7 @@ def genprivkey():
                      '-genkey',
                      '-v',
                      '-keystore',
-                     './PrivateKey/' + str(usralias) + '-private-key.keystore',
+                     privkeydir + str(usralias) + '-private-key.keystore',
                      '-alias',
                      usralias,
                      '-keypass',
@@ -408,11 +426,12 @@ def zipalign():
     import os
     import subprocess
 
+    global sapks, zaapks
+
     os.system('cls')
     print('\n' + 'Zip Aliging' + '\n')
     zipaligncount = 0
-    apkdir = './SignedApks/'
-    apklist = os.listdir(apkdir)
+    apklist = os.listdir(sapks)
     apkcount = len(apklist)
     if len(apklist) == 0:
         print('No Signed APKs Found' + '\n')
@@ -426,8 +445,8 @@ def zipalign():
                 subprocess.call(['./Files/zipalign.exe',
                                  '-f',
                                  '4',
-                                 './SignedApks/' + APK,
-                                 './ZipAlignedApks/' + APK
+                                 sapks + APK,
+                                 zaapks + APK
     ])
             zipaligncount += 1
     print()
@@ -435,7 +454,7 @@ def zipalign():
     input('Press Enter to Continue')
     print()
     # Clear out the objects
-    del zipaligncount, apkdir,  apklist, apkcount
+    del zipaligncount, apklist, apkcount
     mainmenu()
 
 splash()
