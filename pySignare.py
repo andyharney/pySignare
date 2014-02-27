@@ -23,6 +23,30 @@ dgkeydir = './DebugKey/'
 privkeydir = './PrivateKey/'
 # Temp Folder
 tmp = './tmp/'
+# Tools init
+
+
+
+def operatingsystem():
+    import sys
+
+    global keytool, zipalign, jarsigner
+
+    if sys.platform.startswith('linux'):
+        keytool = 'keytool-lin'
+        zipalign = 'zipalign-lin'
+        jarsigner = 'jarsigner-lin'
+    elif sys.platform.startswith('darwin'):
+        keytool = 'keytool-mac'
+        zipalign = 'zipalign-mac'
+        jarsigner = 'jarsigner-mac'
+    elif sys.platform.startswith('win32'):
+        keytool = 'keytool-win.exe'
+        zipalign = 'zipalign-win.exe'
+        jarsigner = 'jarsigner-win.exe'
+    print(keytool, zipalign, jarsigner)
+    print()
+    splash()
 
 # Loads the splash, with a standard Apache Licence 2.0 disclaimer, and an acceptance option
 
@@ -181,7 +205,7 @@ def menuchoice():
             del option
         elif option == 3:
             del option
-            zipalign()
+            zipalignfunc()
         elif option == 4:
             del option
             genprivkey()
@@ -302,6 +326,8 @@ def privatekeysigning(apklist, apkcount, chosenprivatekey):
     import shutil
     import subprocess
 
+    global jarsigner, sapks, usapks, tmp, privkeydir
+
     alias = str(str.rstrip(chosenprivatekey, '-private-key.keystore'))
     signcount = 0
     if len(apklist) == 1:
@@ -321,13 +347,13 @@ def privatekeysigning(apklist, apkcount, chosenprivatekey):
             # Create tmp folder
             os.mkdir('tmp')
             # Copy unsigned apk out
-            shutil.copyfile('./UnsignedApks/' + APK, './tmp/' + APK)
-            subprocess.call(['./Files/jarsigner.exe',
+            shutil.copyfile(usapks + APK, tmp + APK)
+            subprocess.call(['./Files/' + jarsigner,
                              '-keystore',
-                             './PrivateKey/' + str(chosenprivatekey),
+                             privkeydir + str(chosenprivatekey),
                              '-storepass',
                              keystorepass,
-                             './UnsignedApks/' + APK,
+                             usapks + APK,
                              alias,
                              #'-verify',
                              #'-verbose',
@@ -335,11 +361,11 @@ def privatekeysigning(apklist, apkcount, chosenprivatekey):
             ])
             # Now we try to put the signed apk into the signed folder
             try:
-                os.rename('./UnsignedApks/' + APK, './SignedApks/' + APK)
+                os.rename(usapks + APK, sapks + APK)
             except FileExistsError:
                 # If the file already exists, we move signed file out and replace
-                os.rename('./SignedApks/' + APK, './tmp/T_' + APK)
-                os.rename('./UnsignedApks/' + APK, './SignedApks/' + APK)
+                os.rename(sapks + APK, tmp + '_T' + APK)
+                os.rename(usapks + APK, sapks + APK)
             except PermissionError:
                 # If the unsigned apk is open, this error is raised
                 print()
@@ -348,9 +374,9 @@ def privatekeysigning(apklist, apkcount, chosenprivatekey):
                 print()
                 mainmenu()
             # Restore the unsigned apk.
-            os.rename('./tmp/' + APK, './UnsignedApks/' + APK)
+            os.rename(tmp + APK, usapks + APK)
             # Clean up
-            shutil.rmtree('./tmp/')
+            shutil.rmtree(tmp)
             signcount += 1
     print()
     print('Signing has finished, please check the messages above for any errors.')
@@ -371,7 +397,7 @@ def genprivkey():
     import subprocess
     import os
 
-    global privkeydir
+    global privkeydir, keytool
 
     os.system('cls')
     # Generic warning about trusting some code from a random bloke on the intertubes
@@ -395,7 +421,7 @@ def genprivkey():
     while len(keypass) < 6:
         print('Your Key Password MUST be greater than 6 characters, try again')
         keypass = input('Choose Desired KEY Password : ')
-    subprocess.call(['./Files/keytool.exe',
+    subprocess.call(['./Files/' + keytool,
                      '-genkey',
                      '-v',
                      '-keystore',
@@ -421,12 +447,12 @@ def genprivkey():
     mainmenu()
 
 
-def zipalign():
+def zipalignfunc():
 
     import os
     import subprocess
 
-    global sapks, zaapks
+    global sapks, zaapks, zipalign
 
     os.system('cls')
     print('\n' + 'Zip Aliging' + '\n')
@@ -442,7 +468,7 @@ def zipalign():
         while zipaligncount != apkcount:
             for APK in apklist:
                 print(APK)
-                subprocess.call(['./Files/zipalign.exe',
+                subprocess.call(['./Files/' + zipalign,
                                  '-f',
                                  '4',
                                  sapks + APK,
@@ -457,4 +483,4 @@ def zipalign():
     del zipaligncount, apklist, apkcount
     mainmenu()
 
-splash()
+operatingsystem()
