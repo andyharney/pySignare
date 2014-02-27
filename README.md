@@ -4,7 +4,7 @@
 ##Python APK Signer
 
 ###Current Status = Working
-###Current Version v1.001
+###Current Version v1.1
 
 1. Test Key signing works.
 2. Private Key signing works.
@@ -23,7 +23,8 @@ Minor tidy up required.
 ####v1.00  - Initial Release
 ####v1.001 - Minor Code Cleanup
 *  Defined global variables that are called later, rather than re-inventing the wheel in each module.
-
+####v1.1   - Cross Platform
+*  Perform OS check and replace the files needed to run the operation for their OS dependant counterparts. (Untested)
 
 ###Contact
 [Andy @ XDA-Developers](http://forum.xda-developers.com/member.php?u=797171)

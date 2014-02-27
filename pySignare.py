@@ -13,7 +13,7 @@
 #   limitations under the License.
 
 # Define some global vars for later use
-version = '1.001'
+version = '1.1'
 # APK Folders
 usapks = './UnsignedApks/'
 sapks = './SignedApks/'
