@@ -21,8 +21,10 @@ Minor tidy up required.
 
 ###Changelog
 ####v1.00  - Initial Release
+
 ####v1.001 - Minor Code Cleanup
 *  Defined global variables that are called later, rather than re-inventing the wheel in each module.
+
 ####v1.1   - Cross Platform
 *  Perform OS check and replace the files needed to run the operation for their OS dependant counterparts. (Untested)
 
