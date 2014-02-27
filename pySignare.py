@@ -30,22 +30,25 @@ tmp = './tmp/'
 def operatingsystem():
     import sys
 
-    global keytool, zipalign, jarsigner
+    global keytool, zipalign, jarsigner, osplat
 
     if sys.platform.startswith('linux'):
+        osplat = 'Linux'
         keytool = 'keytool-lin'
         zipalign = 'zipalign-lin'
         jarsigner = 'jarsigner-lin'
     elif sys.platform.startswith('darwin'):
+        osplat = 'Mac'
         keytool = 'keytool-mac'
         zipalign = 'zipalign-mac'
         jarsigner = 'jarsigner-mac'
     elif sys.platform.startswith('win32'):
+        osplat = 'Windows'
         keytool = 'keytool-win.exe'
         zipalign = 'zipalign-win.exe'
         jarsigner = 'jarsigner-win.exe'
-    print(keytool, zipalign, jarsigner)
-    print()
+    #print(keytool, zipalign, jarsigner)
+    #print()
     splash()
 
 # Loads the splash, with a standard Apache Licence 2.0 disclaimer, and an acceptance option
@@ -135,10 +138,10 @@ def mainmenu():
 
     import os
 
-    global version
+    global version, os
 
     os.system('cls')
-    print('pySignare v' + version)
+    print('pySignare v' + version + ' ' + osplat)
     print()
     print()
     # Here the main menu is printed
