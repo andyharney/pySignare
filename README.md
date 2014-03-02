@@ -8,7 +8,7 @@
 
 1. Test Key signing works.
 2. Private Key signing works.
-3. ZipALign works.
+3. ZipAlign works.
 4. Private Key generation works.
 
 100% Code Complete

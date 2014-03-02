@@ -23,43 +23,51 @@ dgkeydir = './DebugKey/'
 privkeydir = './PrivateKey/'
 # Temp Folder
 tmp = './tmp/'
-# Tools init
-
 
 
 def operatingsystem():
     import sys
 
-    global keytool, zipalign, jarsigner, osplat
+    global keytool, zipalign, jarsigner, osplat, clsh, warning
 
     if sys.platform.startswith('linux'):
+        clsh = 'clear'
         osplat = 'Linux'
         keytool = 'keytool-lin'
         zipalign = 'zipalign-lin'
         jarsigner = 'jarsigner-lin'
     elif sys.platform.startswith('darwin'):
+        clsh = 'clear'
         osplat = 'Mac'
         keytool = 'keytool-mac'
         zipalign = 'zipalign-mac'
         jarsigner = 'jarsigner-mac'
     elif sys.platform.startswith('win32'):
+        clsh = 'cls'
         osplat = 'Windows'
         keytool = 'keytool-win.exe'
         zipalign = 'zipalign-win.exe'
         jarsigner = 'jarsigner-win.exe'
+        warning = ''
     #print(keytool, zipalign, jarsigner)
     #print()
+    if not sys.platform.startswith('win32'):
+        warning = '''****** Warning ******
+Linux & OSX Support is Experimental
+Proceed At Your Own Risk'''
     splash()
+
 
 # Loads the splash, with a standard Apache Licence 2.0 disclaimer, and an acceptance option
 
 
 def splash():
-
     import sys
 
+    global warning
+
     print()
-    print('pySignare')
+    print('pySignare v' + version + ' ' + osplat)
     print('https://github.com/andyharney/pySignare')
     print('')
     print('Written Exclusively For All Members of XDA-Developers.com')
@@ -82,6 +90,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.''')
     print()
+    print(warning)
     print()
     lic = input('Do you accept the terms of the above licence? Y/N - ')
     print()
@@ -97,7 +106,6 @@ limitations under the License.''')
 
 
 def checkjava():
-
     import sys
     import subprocess
     # Java is called, checking if its in the system path, if not. It should exit with a user prompt
@@ -117,7 +125,6 @@ def checkjava():
 
 
 def checkoutputfolder():
-
     import os
     import os.path
 
@@ -135,12 +142,11 @@ def checkoutputfolder():
 
 
 def mainmenu():
-
     import os
 
-    global version, os
+    global version, osplat, clsh
 
-    os.system('cls')
+    os.system(clsh)
     print('pySignare v' + version + ' ' + osplat)
     print()
     print()
@@ -162,7 +168,6 @@ def mainmenu():
 
 
 def menuchoice():
-
     import sys
 
     # A Couple custom exceptions are created to catch any invalid/secret menu choices
@@ -221,7 +226,6 @@ def menuchoice():
 
 
 def debugkeysign():
-
     import os
     import os.path
     import subprocess
@@ -260,7 +264,6 @@ def debugkeysign():
 
 
 def privkeyprep():
-
     class MenuError(Exception):
         pass
 
@@ -324,7 +327,6 @@ def privkeyprep():
 
 
 def privatekeysigning(apklist, apkcount, chosenprivatekey):
-
     import os
     import shutil
     import subprocess
@@ -396,7 +398,6 @@ def privatekeysigning(apklist, apkcount, chosenprivatekey):
 
 
 def genprivkey():
-
     import subprocess
     import os
 
@@ -451,7 +452,6 @@ def genprivkey():
 
 
 def zipalignfunc():
-
     import os
     import subprocess
 
@@ -476,7 +476,7 @@ def zipalignfunc():
                                  '4',
                                  sapks + APK,
                                  zaapks + APK
-    ])
+                ])
             zipaligncount += 1
     print()
     print('Zip Aligning has finished, please check the messages above for any errors.')
@@ -485,5 +485,6 @@ def zipalignfunc():
     # Clear out the objects
     del zipaligncount, apklist, apkcount
     mainmenu()
+
 
 operatingsystem()
