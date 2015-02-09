@@ -49,8 +49,8 @@ def operatingsystem():
         zipalign = 'zipalign-win.exe'
         jarsigner = 'jarsigner-win.exe'
         warning = ''
-    #print(keytool, zipalign, jarsigner)
-    #print()
+    # print(keytool, zipalign, jarsigner)
+    # print()
     if not sys.platform.startswith('win32'):
         warning = '''****** Warning ******
 Linux & OSX Support is Experimental
@@ -90,19 +90,26 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.''')
     print()
-    print(warning)
-    print()
-    lic = input('Do you accept the terms of the above licence? Y/N - ')
-    print()
-    #
-    if lic.lower() == 'y':
-        del lic
+    try:
+        if len(warning) != 0:
+            print(warning)
+            print()
+        lic = input('Do you accept the terms of the above licence? Y/N - ')
+        print()
+        assert isinstance(lic, object)
+        if lic.lower() == 'y':
+            del lic
+            checkjava()
+        else:
+            print('Without accepting the terms, you cannot continue')
+            input('Press Enter To Exit')
+            del lic
+            sys.exit()
+    except NameError as e:
+        print('An Error Occurred\n')
+        print(e)
+        print('\nAssuming You Wish to Continue. This May Not Work.')
         checkjava()
-    else:
-        print('Without accepting the terms, you cannot continue')
-        input('Press Enter To Exit')
-        del lic
-        sys.exit()
 
 
 def checkjava():
@@ -202,6 +209,7 @@ def menuchoice():
             print('Very Clever, but nothing is hidden. Yet')
 
     # Menu choice logic
+    # Lack of case statements shows.
     if 1 <= option <= 5:
         # Options List
         if option == 1:
